@@ -5,13 +5,13 @@ My initial goal is to follow the books as close as possible, while leaving optim
 
 ## Version
 
-### 0.1
-
-* Implement content from the first minibook.
-* add font support.
-* add simple GUI overlay for FPS display.
-
 ### 0.2
 
-* Impelement content from the second minibook.
-* TBD
+* [ ] Impelement content from the second minibook.
+* [ ] TBD
+
+### 0.1
+
+* [ ] Implement content from the first minibook.
+* [ ] add font support.
+* [ ] add simple GUI overlay for FPS display.
