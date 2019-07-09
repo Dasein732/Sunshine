@@ -2,11 +2,13 @@
 
 namespace Program
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        [STAThread]
+        public static void Main()
         {
-            Console.WriteLine("Hello World!");
+            using var engine = new Engine();
+            engine.Run();
         }
     }
 }
