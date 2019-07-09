@@ -1,7 +1,7 @@
 # Sunshine
 
 C# implementation of Peter Shirley's Ray Tracer series([first](https://www.amazon.com/Ray-Tracing-Weekend-Minibooks-Book-ebook/dp/B01B5AODD8), [second](https://www.amazon.com/gp/product/B01CO7PQ8C), [third](https://www.amazon.com/gp/product/B01DN58P8C)).
-My initial goal is to follow the books as close as possible, while leaving optimizations and refactoring for later. 
+My initial goal is to follow the books as close as possible, while leaving optimizations and refactoring for later.
 
 ## Version
 
@@ -13,5 +13,5 @@ My initial goal is to follow the books as close as possible, while leaving optim
 
 ### 0.2
 
-* Impelement content from the secodn minibook.
+* Impelement content from the second minibook.
 * TBD
