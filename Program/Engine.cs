@@ -32,6 +32,8 @@ namespace Program
             _frame = new Texture2D(_graphics.GraphicsDevice, X, Y);
             Content.RootDirectory = "Content";
 
+            Window.AllowUserResizing = false;
+
             base.Initialize();
         }
 
