@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Program
 {
@@ -49,6 +50,9 @@ namespace Program
 
         protected override void Update(GameTime gameTime)
         {
+            if(Keyboard.GetState().IsKeyDown(Keys.Escape))
+                Exit();
+
             base.Update(gameTime);
         }
 
