@@ -58,9 +58,9 @@ namespace Program
 
         protected override void Draw(GameTime gameTime)
         {
-            _frameBuffer.SetData(_tracer.NextFrame());
+            GraphicsDevice.Clear(Color.White);
 
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            _frameBuffer.SetData(_tracer.NextFrame());
 
             _spriteBatch.Begin();
             _spriteBatch.Draw(_frameBuffer, new Vector2(0, 0), Color.White);
