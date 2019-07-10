@@ -12,8 +12,8 @@ namespace Program
         private SpriteBatch _spriteBatch;
         private SpriteFont font;
 
-        private IRenderer _renderer;
-        private Texture2D _frame;
+        private IRenderer _tracer;
+        private Texture2D _frameContainer;
 
         public Engine()
         {
@@ -29,7 +29,7 @@ namespace Program
         protected override void Initialize()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _frame = new Texture2D(_graphics.GraphicsDevice, X, Y);
+            _frameContainer = new Texture2D(_graphics.GraphicsDevice, X, Y);
             Content.RootDirectory = "Content";
 
             Window.AllowUserResizing = false;
@@ -53,10 +53,10 @@ namespace Program
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            //_rect.SetData(_renderer.NextFrame());
+            //_frameContainer.SetData(_tracer.NextFrame());
 
             _spriteBatch.Begin();
-            // _spriteBatch.Draw(_frame, new Vector2(0, 0), Color.White);
+            // _spriteBatch.Draw(_frameContainer, new Vector2(0, 0), Color.White);
             // TODO: Position FPS based on font size.
             _spriteBatch.DrawString(font, GUI.FPS(gameTime), new Vector2(X - X / 20, 0 + Y / 20), Color.Black);
             _spriteBatch.End();
