@@ -10,8 +10,10 @@ namespace Program
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private SpriteFont font;
+
         private IRenderer _renderer;
-        private Texture2D frameResult;
+        private Texture2D _frame;
 
         public Engine()
         {
@@ -25,9 +27,17 @@ namespace Program
         protected override void Initialize()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            frameResult = new Texture2D(_graphics.GraphicsDevice, X, Y);
+            _frame = new Texture2D(_graphics.GraphicsDevice, X, Y);
+            Content.RootDirectory = "Content";
 
             base.Initialize();
+        }
+
+        protected override void LoadContent()
+        {
+            font = Content.Load<SpriteFont>("Font");
+
+            base.LoadContent();
         }
 
         protected override void Update(GameTime gameTime)
@@ -42,7 +52,9 @@ namespace Program
             //_rect.SetData(_renderer.NextFrame());
 
             _spriteBatch.Begin();
-            // _spriteBatch.Draw(_rect, new Vector2(0, 0), Color.White);
+            // _spriteBatch.Draw(_frame, new Vector2(0, 0), Color.White);
+            // TODO: Position FPS based on font size.
+            _spriteBatch.DrawString(font, ((int)(1 / gameTime.ElapsedGameTime.TotalSeconds)).ToString(), new Vector2(X - X / 20, 0 + Y / 20), Color.Black);
             _spriteBatch.End();
 
             base.Draw(gameTime);
