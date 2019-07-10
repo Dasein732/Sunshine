@@ -1,35 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Program
 {
-    public class Engine : Game
+    public sealed class Engine : Game
     {
-        private const int X = 800;
-        private const int Y = 400;
+        private int X = 800;
+        private int Y = 400;
 
-        private readonly GraphicsDeviceManager _graphics;
-        private readonly SpriteBatch _spriteBatch;
-        private readonly IRenderer _renderer;
-        private readonly Texture2D _rect;
+        private GraphicsDeviceManager _graphics;
+        private SpriteBatch _spriteBatch;
+        private IRenderer _renderer;
+        private Texture2D frameResult;
 
         public Engine()
         {
+            // Manager must be set before Initialize is called
             _graphics = new GraphicsDeviceManager(this);
+            _graphics.PreferredBackBufferWidth = X;
+            _graphics.PreferredBackBufferHeight = Y;
             _graphics.ApplyChanges();
-
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _rect = new Texture2D(_graphics.GraphicsDevice, X, Y);
         }
 
         protected override void Initialize()
         {
-            _graphics.PreferredBackBufferWidth = X;
-            _graphics.PreferredBackBufferHeight = Y;
-            _graphics.ApplyChanges();
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            frameResult = new Texture2D(_graphics.GraphicsDevice, X, Y);
 
             base.Initialize();
         }
