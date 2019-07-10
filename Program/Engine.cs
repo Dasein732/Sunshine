@@ -5,8 +5,8 @@ namespace Program
 {
     public sealed class Engine : Game
     {
-        private int X = 800;
-        private int Y = 400;
+        private readonly int X = 800;
+        private readonly int Y = 400;
 
         private readonly GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -14,7 +14,7 @@ namespace Program
         private GUI _gui;
         private IRenderer _tracer;
 
-        private Texture2D _frameContainer;
+        private Texture2D _frameBuffer;
 
         public Engine()
         {
@@ -31,8 +31,8 @@ namespace Program
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _gui = new GUI(_spriteBatch, X, Y);
-            // _tracer init here
-            _frameContainer = new Texture2D(_graphics.GraphicsDevice, X, Y);
+            _tracer = new RayTracer(X, Y);
+            _frameBuffer = new Texture2D(_graphics.GraphicsDevice, X, Y);
 
             Content.RootDirectory = "Content";
             Window.AllowUserResizing = false;
@@ -54,12 +54,12 @@ namespace Program
 
         protected override void Draw(GameTime gameTime)
         {
-            //_frameContainer.SetData(_tracer.NextFrame());
+            _frameBuffer.SetData(_tracer.NextFrame());
 
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _spriteBatch.Begin();
-            // _spriteBatch.Draw(_frameContainer, new Vector2(0, 0), Color.White);
+            _spriteBatch.Draw(_frameBuffer, new Vector2(0, 0), Color.White);
             _gui.DrawFPS(gameTime);
             _spriteBatch.End();
 

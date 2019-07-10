@@ -11,7 +11,7 @@ namespace Program
         public SpriteFont Font { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
-        private SpriteBatch _spriteBatch;
+        private readonly SpriteBatch _spriteBatch;
 
         public GUI(SpriteBatch spriteBatch)
         {
@@ -26,7 +26,7 @@ namespace Program
         }
 
         public void DrawFPS(GameTime gametime) =>
-            _spriteBatch.DrawString(Font, GUI.FPS(gametime), new Vector2(X - X / 20, 0 + Y / 20), Color.Black);
+            _spriteBatch.DrawString(Font, FPS(gametime), new Vector2(X - X / 20, 0 + Y / 20), Color.Black);
 
         public static string FPS(GameTime gametime) => FPS(gametime.ElapsedGameTime.TotalSeconds);
 
