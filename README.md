@@ -14,4 +14,4 @@ My initial goal is to follow the books as close as possible, while leaving optim
 
 * [ ] Implement content from the first minibook.
 * [X] add font support.
-* [ ] add simple GUI overlay for FPS display.
+* [X] add simple GUI overlay for FPS display.

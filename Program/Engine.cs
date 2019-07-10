@@ -8,7 +8,7 @@ namespace Program
         private int X = 800;
         private int Y = 400;
 
-        private GraphicsDeviceManager _graphics;
+        private readonly GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private SpriteFont font;
 
@@ -18,9 +18,11 @@ namespace Program
         public Engine()
         {
             // Manager must be set before Initialize is called
-            _graphics = new GraphicsDeviceManager(this);
-            _graphics.PreferredBackBufferWidth = X;
-            _graphics.PreferredBackBufferHeight = Y;
+            _graphics = new GraphicsDeviceManager(this)
+            {
+                PreferredBackBufferWidth = X,
+                PreferredBackBufferHeight = Y
+            };
             _graphics.ApplyChanges();
         }
 
@@ -54,7 +56,7 @@ namespace Program
             _spriteBatch.Begin();
             // _spriteBatch.Draw(_frame, new Vector2(0, 0), Color.White);
             // TODO: Position FPS based on font size.
-            _spriteBatch.DrawString(font, ((int)(1 / gameTime.ElapsedGameTime.TotalSeconds)).ToString(), new Vector2(X - X / 20, 0 + Y / 20), Color.Black);
+            _spriteBatch.DrawString(font, GUI.FPS(gameTime), new Vector2(X - X / 20, 0 + Y / 20), Color.Black);
             _spriteBatch.End();
 
             base.Draw(gameTime);
