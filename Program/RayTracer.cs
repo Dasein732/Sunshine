@@ -62,26 +62,33 @@ namespace Program
 
         private static void PixelColor(in Ray ray, ref Color color)
         {
-            if(IsSphereHit(SpherePosition, SphereRadius, ray))
+            float t = SphereHit(SpherePosition, SphereRadius, ray);
+
+            if(t > 0f)
             {
-                color.R = 255;
-                color.G = 0;
-                color.B = 0;
+                Vector3 normal = Vector3.Normalize(ray.PointAtParameter(t) - SpherePosition);
+                var result = 0.5f * new Vector3(normal.X + 1, normal.Y + 1, normal.Z + 1);
+
+                color.R = (byte)(result.X * 255.99f);
+                color.G = (byte)(result.Y * 255.99f);
+                color.B = (byte)(result.Z * 255.99f);
                 color.A = 255;
-                return;
             }
+            else
+            {
+                t = 0.5f * (Vector3.Normalize(ray.Direction).Y + 1);
 
-            float t = 0.5f * (Vector3.Normalize(ray.Direction).Y + 1);
+                //  lerp => blended_value = (1-t)*start_value + t*end_value​
+                var result = (1.0f - t) * Vector3.One + t * new Vector3(0.5f, 0.7f, 1.0f);
 
-            //  lerp => blended_value = (1-t)*start_value + t*end_value​
-            var result = (1.0f - t) * Vector3.One + t * new Vector3(0.5f, 0.7f, 1.0f);
-            color.R = (byte)(result.X * 255.99f);
-            color.G = (byte)(result.Y * 255.99f);
-            color.B = (byte)(result.Z * 255.99f);
-            color.A = 255;
+                color.R = (byte)(result.X * 255.99f);
+                color.G = (byte)(result.Y * 255.99f);
+                color.B = (byte)(result.Z * 255.99f);
+                color.A = 255;
+            }
         }
 
-        private static bool IsSphereHit(in Vector3 center, float radius, in Ray ray)
+        private static float SphereHit(in Vector3 center, float radius, in Ray ray)
         {
             var rayToCenter = ray.Origin - center;
             float a = Vector3.Dot(ray.Direction, ray.Direction);
@@ -89,7 +96,14 @@ namespace Program
             float c = Vector3.Dot(rayToCenter, rayToCenter) - radius * radius;
             float discriminant = b * b - 4 * a * c;
 
-            return discriminant > 0;
+            if(discriminant < 0)
+            {
+                return -1.0f;
+            }
+            else
+            {
+                return (-b - (float)Math.Sqrt(discriminant)) / (2.0f * a);
+            }
         }
     }
 }
