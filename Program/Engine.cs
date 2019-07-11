@@ -36,6 +36,7 @@ namespace Program
         protected override void Initialize()
         {
             _renderConfig.Antialiasing = false;
+            _renderConfig.AASamples = 8;
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _gui = new GUI(_spriteBatch, _renderConfig.Width, _renderConfig.Height);
             _tracer = new RayTracer(_renderConfig);
