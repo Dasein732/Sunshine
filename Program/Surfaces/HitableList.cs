@@ -6,7 +6,7 @@ namespace Program.Surfaces
 {
     public sealed class HitableList : Hitable
     {
-        private List<Hitable> list;
+        private readonly List<Hitable> list;
 
         public HitableList(List<Hitable> list)
         {

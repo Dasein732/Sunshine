@@ -7,8 +7,8 @@ namespace Program.Surfaces
 {
     public sealed class Sphere : Hitable
     {
-        private Vector3 Center;
-        private float Radius;
+        public Vector3 Center { get; set; }
+        public float Radius { get; set; }
 
         public Sphere()
         {

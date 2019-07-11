@@ -112,7 +112,7 @@ namespace Program
 
         private Vector3 RandomInUnitSphere()
         {
-            Vector3 p = new Vector3();
+            Vector3 p;
 
             do
             {
