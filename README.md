@@ -9,7 +9,7 @@ My intention is to eventually create a functional real time tracer running on th
 
 Rudimentary functionality is in place, I wouldn't even call this a toy project at this point.
 
-![status](https://github.com/Dasein732/Sunshine/blob/master/CurrentProgress.png)
+![status](CurrentProgress.png)
 
 ## Version
 
