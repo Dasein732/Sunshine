@@ -42,8 +42,6 @@ namespace Program
 
         public Color[] NextFrame()
         {
-            int samples = 100;
-
             for(int y = renderConfig.Height - 1; y >= 0; y--)
             {
                 for(int x = 0; x < renderConfig.Width; x++)
@@ -56,7 +54,7 @@ namespace Program
                     {
                         Vector3 color = new Vector3();
 
-                        for(int i = 0; i < samples; i++)
+                        for(int i = 0; i < renderConfig.AASamples; i++)
                         {
                             float u = (float)(x + rand.NextDouble()) / renderConfig.Width;
                             float v = (float)(y + rand.NextDouble()) / renderConfig.Height;
@@ -64,7 +62,7 @@ namespace Program
                             color += PixelColor(camera.GetRay(u, v), World);
                         }
 
-                        color /= samples;
+                        color /= renderConfig.AASamples;
                         color *= 255.99f;
                         frameBuffer[index].R = (byte)color.X;
                         frameBuffer[index].G = (byte)color.Y;
