@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Program.Util
+﻿namespace Program.Util
 {
     public static class MathUtil
     {

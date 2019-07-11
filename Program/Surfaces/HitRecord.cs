@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using Program.Surfaces;
 
 namespace Program
 {
@@ -10,5 +8,6 @@ namespace Program
         public float T;
         public Vector3 Normal;
         public Vector3 P;
+        public Material material;
     }
 }
