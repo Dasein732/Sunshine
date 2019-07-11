@@ -11,6 +11,7 @@ namespace Program
 
         private readonly GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private readonly RendererConfiguration _renderConfig;
 
         private GUI _gui;
         private IRenderer _tracer;
@@ -26,13 +27,17 @@ namespace Program
                 PreferredBackBufferHeight = Y
             };
             _graphics.ApplyChanges();
+            _renderConfig = new RendererConfiguration();
         }
 
         protected override void Initialize()
         {
+            _renderConfig.Width = X;
+            _renderConfig.Height = Y;
+            _renderConfig.Antialiasing = true;
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _gui = new GUI(_spriteBatch, X, Y);
-            _tracer = new RayTracer(X, Y);
+            _tracer = new RayTracer(_renderConfig);
             _frameBuffer = new Texture2D(_graphics.GraphicsDevice, X, Y);
 
             Content.RootDirectory = "Content";

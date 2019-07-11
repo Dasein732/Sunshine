@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Program
+﻿namespace Program
 {
-    public static class RendererConfiguration
+    public class RendererConfiguration
     {
-        public static bool Antialiasing { get; set; }
+        public bool Antialiasing { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
     }
 }

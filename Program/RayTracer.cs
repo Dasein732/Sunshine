@@ -3,34 +3,26 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Program.Surfaces;
+using Program.Util;
 
 namespace Program
 {
     public sealed class RayTracer : IRenderer
     {
-        private int width;
-        private int height;
-
         private readonly Color[] frameBuffer;
-
-        // TODO: turn these into calculated values based on aspect ratio
-        // TODO: implement camera class
-        private readonly Vector3 lowerLeftCorner = new Vector3(-2f, -1f, -1f);
-
-        private readonly Vector3 Horizontal = new Vector3(4f, 0f, 0f);
-
-        private readonly Vector3 Vertical = new Vector3(0f, 2f, 0f);
-
-        private readonly Vector3 Origin = new Vector3(0f, 0f, 0f);
+        private readonly Camera camera;
 
         // TODO: create some sort of entity manager or scene graph later on
         private readonly HitableList World;
 
-        public RayTracer(int x, int y)
+        private readonly XorShiftRandom rand;
+
+        private readonly RendererConfiguration renderConfig;
+
+        public RayTracer(RendererConfiguration renderConfig)
         {
-            width = x;
-            height = y;
-            frameBuffer = new Color[width * height];
+            this.renderConfig = renderConfig;
+            frameBuffer = new Color[renderConfig.Width * renderConfig.Height];
 
             for(int i = 0; i < frameBuffer.Length; i++)
             {
@@ -44,56 +36,75 @@ namespace Program
             };
 
             World = new HitableList(objectList);
+
+            camera = new Camera(new Vector3(-2f, -1f, -1f), new Vector3(4f, 0f, 0f), new Vector3(0f, 2f, 0f));
+            rand = new XorShiftRandom();
         }
 
         public Color[] NextFrame()
         {
-            for(int y = height - 1; y >= 0; y--)
+            int samples = 100;
+
+            for(int y = renderConfig.Height - 1; y >= 0; y--)
             {
-                for(int x = 0; x < width; x++)
+                for(int x = 0; x < renderConfig.Width; x++)
                 {
                     // chapter 1 outputs the image to the image file, we're flipping the
                     // row pointer so that we start from the other end in order to get same visual result.
-                    var index = (height - 1 - y) * width + x;
+                    var index = (renderConfig.Height - 1 - y) * renderConfig.Width + x;
 
-                    float u = (float)x / width;
-                    float v = (float)y / height;
+                    if(renderConfig.Antialiasing)
+                    {
+                        Vector3 color = new Vector3();
 
-                    var ray = new Ray(Origin, lowerLeftCorner + u * Horizontal + v * Vertical);
-                    PixelColor(ray, World, ref frameBuffer[index]);
+                        for(int i = 0; i < samples; i++)
+                        {
+                            float u = (float)(x + rand.NextDouble()) / renderConfig.Width;
+                            float v = (float)(y + rand.NextDouble()) / renderConfig.Height;
+
+                            color += PixelColor(camera.GetRay(u, v), World);
+                        }
+
+                        color /= samples;
+                        color *= 255.99f;
+                        frameBuffer[index].R = (byte)color.X;
+                        frameBuffer[index].G = (byte)color.Y;
+                        frameBuffer[index].B = (byte)color.Z;
+                        frameBuffer[index].A = 255;
+                    }
+                    else
+                    {
+                        float u = (float)x / renderConfig.Width;
+                        float v = (float)y / renderConfig.Height;
+
+                        var color = PixelColor(camera.GetRay(u, v), World);
+
+                        color *= 255.99f;
+                        frameBuffer[index].R = (byte)color.X;
+                        frameBuffer[index].G = (byte)color.Y;
+                        frameBuffer[index].B = (byte)color.Z;
+                        frameBuffer[index].A = 255;
+                    }
                 }
             }
 
             return frameBuffer;
         }
 
-        private static void PixelColor(in Ray ray, HitableList hitableList, ref Color color)
+        private static Vector3 PixelColor(in Ray ray, HitableList hitableList)
         {
             var hitRecord = new HitRecord();
 
             if(hitableList.Hit(ray, 0f, float.MaxValue, ref hitRecord))
             {
-                var result = 0.5f * new Vector3(hitRecord.Normal.X + 1, hitRecord.Normal.Y + 1, hitRecord.Normal.Z + 1);
-                result *= 255.99f;
-
-                color.R = (byte)result.X;
-                color.G = (byte)result.Y;
-                color.B = (byte)result.Z;
-
-                color.A = 255;
+                return 0.5f * new Vector3(hitRecord.Normal.X + 1, hitRecord.Normal.Y + 1, hitRecord.Normal.Z + 1);
             }
             else
             {
                 float t = 0.5f * (Vector3.Normalize(ray.Direction).Y + 1);
 
                 //  lerp => blended_value = (1-t)*start_value + t*end_value​
-                var result = (1.0f - t) * Vector3.One + t * new Vector3(0.5f, 0.7f, 1.0f);
-                result *= 255.99f;
-
-                color.R = (byte)result.X;
-                color.G = (byte)result.Y;
-                color.B = (byte)result.Z;
-                color.A = 255;
+                return (1.0f - t) * Vector3.One + t * new Vector3(0.5f, 0.7f, 1.0f);
             }
         }
     }
