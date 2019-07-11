@@ -21,5 +21,6 @@ Rudimentary functionality is in place, I wouldn't even call this a toy project a
 ### 0.1
 
 * [ ] Implement content from the first minibook.
-* [X] add font support.
-* [X] add simple GUI overlay for FPS display.
+* [X] Add font support.
+* [X] Add simple GUI overlay for FPS display.
+* [X] Implement basic render configuration system.
