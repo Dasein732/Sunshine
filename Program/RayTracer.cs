@@ -63,6 +63,8 @@ namespace Program
                         }
 
                         color /= renderConfig.AASamples;
+                        color = new Vector3(MathUtil.FastSqrt(color.X), MathUtil.FastSqrt(color.Y), MathUtil.FastSqrt(color.Z));
+
                         color *= 255.99f;
                         frameBuffer[index].R = (byte)color.X;
                         frameBuffer[index].G = (byte)color.Y;
@@ -76,6 +78,8 @@ namespace Program
 
                         var color = PixelColor(camera.GetRay(u, v), World);
 
+                        color = new Vector3(MathUtil.FastSqrt(color.X), MathUtil.FastSqrt(color.Y), MathUtil.FastSqrt(color.Z));
+
                         color *= 255.99f;
                         frameBuffer[index].R = (byte)color.X;
                         frameBuffer[index].G = (byte)color.Y;
@@ -88,13 +92,14 @@ namespace Program
             return frameBuffer;
         }
 
-        private static Vector3 PixelColor(in Ray ray, HitableList hitableList)
+        private Vector3 PixelColor(in Ray ray, HitableList hitableList)
         {
             var hitRecord = new HitRecord();
 
-            if(hitableList.Hit(ray, 0f, float.MaxValue, ref hitRecord))
+            if(hitableList.Hit(ray, 0.001f, float.MaxValue, ref hitRecord))
             {
-                return 0.5f * new Vector3(hitRecord.Normal.X + 1, hitRecord.Normal.Y + 1, hitRecord.Normal.Z + 1);
+                var target = hitRecord.P + hitRecord.Normal + RandomInUnitSphere();
+                return 0.5f * PixelColor(new Ray(hitRecord.P, target - hitRecord.P), hitableList);
             }
             else
             {
@@ -103,6 +108,18 @@ namespace Program
                 //  lerp => blended_value = (1-t)*start_value + t*end_value​
                 return (1.0f - t) * Vector3.One + t * new Vector3(0.5f, 0.7f, 1.0f);
             }
+        }
+
+        private Vector3 RandomInUnitSphere()
+        {
+            Vector3 p = new Vector3();
+
+            do
+            {
+                p = 2.0f * new Vector3(rand.NextFloat(), rand.NextFloat(), rand.NextFloat()) - Vector3.One;
+            } while(p.LengthSquared() >= 1);
+
+            return p;
         }
     }
 }

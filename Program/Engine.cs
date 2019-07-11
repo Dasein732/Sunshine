@@ -35,13 +35,12 @@ namespace Program
 
         protected override void Initialize()
         {
-            _renderConfig.Antialiasing = false;
+            _renderConfig.Antialiasing = true;
             _renderConfig.AASamples = 8;
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _gui = new GUI(_spriteBatch, _renderConfig.Width, _renderConfig.Height);
             _tracer = new RayTracer(_renderConfig);
             _frameBuffer = new Texture2D(_graphics.GraphicsDevice, _renderConfig.Width, _renderConfig.Height);
-
             Content.RootDirectory = "Content";
             Window.AllowUserResizing = false;
 

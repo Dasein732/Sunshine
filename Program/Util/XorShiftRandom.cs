@@ -20,6 +20,11 @@ namespace Program.Util
 
         private const double DOUBLE_UNIT = 1.0 / (int.MaxValue + 1.0);
 
+        public float NextFloat()
+        {
+            return (float)NextDouble();
+        }
+
         public double NextDouble()
         {
             double _;
