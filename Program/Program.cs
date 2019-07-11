@@ -7,7 +7,7 @@ namespace Program
         [STAThread]
         public static void Main()
         {
-            using var engine = new Engine();
+            using var engine = new Engine(800, 400);
             engine.Run();
         }
     }
