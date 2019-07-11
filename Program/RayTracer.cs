@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Program.Surfaces;
 
 namespace Program
 {
@@ -22,6 +23,9 @@ namespace Program
 
         private readonly Vector3 Origin = new Vector3(0f, 0f, 0f);
 
+        // TODO: create some sort of entity manager or scene graph later on
+        private readonly HitableList World;
+
         public RayTracer(int x, int y)
         {
             width = x;
@@ -32,6 +36,14 @@ namespace Program
             {
                 frameBuffer[i] = new Color();
             }
+
+            List<Hitable> objectList = new List<Hitable>()
+            {
+            new Sphere(new Vector3(0f, 0f, -1f), 0.5f),
+            new Sphere(new Vector3(0f, -100.5f, -1f), 100f)
+            };
+
+            World = new HitableList(objectList);
         }
 
         public Color[] NextFrame()
@@ -48,61 +60,40 @@ namespace Program
                     float v = (float)y / height;
 
                     var ray = new Ray(Origin, lowerLeftCorner + u * Horizontal + v * Vertical);
-                    PixelColor(ray, ref frameBuffer[index]);
+                    PixelColor(ray, World, ref frameBuffer[index]);
                 }
             }
 
             return frameBuffer;
         }
 
-        // Temp, only using these for sake of clarity, will remove once the collision method becomes modular
-        private static Vector3 SpherePosition = new Vector3(0f, 0f, -1f);
-
-        private static float SphereRadius = 0.5f;
-
-        private static void PixelColor(in Ray ray, ref Color color)
+        private static void PixelColor(in Ray ray, HitableList hitableList, ref Color color)
         {
-            float t = SphereHit(SpherePosition, SphereRadius, ray);
+            var hitRecord = new HitRecord();
 
-            if(t > 0f)
+            if(hitableList.Hit(ray, 0f, float.MaxValue, ref hitRecord))
             {
-                Vector3 normal = Vector3.Normalize(ray.PointAtParameter(t) - SpherePosition);
-                var result = 0.5f * new Vector3(normal.X + 1, normal.Y + 1, normal.Z + 1);
+                var result = 0.5f * new Vector3(hitRecord.Normal.X + 1, hitRecord.Normal.Y + 1, hitRecord.Normal.Z + 1);
+                result *= 255.99f;
 
-                color.R = (byte)(result.X * 255.99f);
-                color.G = (byte)(result.Y * 255.99f);
-                color.B = (byte)(result.Z * 255.99f);
+                color.R = (byte)result.X;
+                color.G = (byte)result.Y;
+                color.B = (byte)result.Z;
+
                 color.A = 255;
             }
             else
             {
-                t = 0.5f * (Vector3.Normalize(ray.Direction).Y + 1);
+                float t = 0.5f * (Vector3.Normalize(ray.Direction).Y + 1);
 
                 //  lerp => blended_value = (1-t)*start_value + t*end_value​
                 var result = (1.0f - t) * Vector3.One + t * new Vector3(0.5f, 0.7f, 1.0f);
+                result *= 255.99f;
 
-                color.R = (byte)(result.X * 255.99f);
-                color.G = (byte)(result.Y * 255.99f);
-                color.B = (byte)(result.Z * 255.99f);
+                color.R = (byte)result.X;
+                color.G = (byte)result.Y;
+                color.B = (byte)result.Z;
                 color.A = 255;
-            }
-        }
-
-        private static float SphereHit(in Vector3 center, float radius, in Ray ray)
-        {
-            var rayToCenter = ray.Origin - center;
-            float a = Vector3.Dot(ray.Direction, ray.Direction);
-            float b = 2.0f * Vector3.Dot(rayToCenter, ray.Direction);
-            float c = Vector3.Dot(rayToCenter, rayToCenter) - radius * radius;
-            float discriminant = b * b - 4 * a * c;
-
-            if(discriminant < 0)
-            {
-                return -1.0f;
-            }
-            else
-            {
-                return (-b - (float)Math.Sqrt(discriminant)) / (2.0f * a);
             }
         }
     }
