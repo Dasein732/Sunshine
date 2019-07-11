@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using Program.Surfaces;
+using Program.Materials;
 
 namespace Program
 {
@@ -8,6 +8,6 @@ namespace Program
         public float T;
         public Vector3 Normal;
         public Vector3 P;
-        public Material material;
+        public Material Material;
     }
 }

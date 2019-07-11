@@ -66,7 +66,6 @@ namespace Program
             GraphicsDevice.Clear(Color.White);
 
             _frameBuffer.SetData(_tracer.NextFrame());
-            _spriteBatch.Begin();
             _spriteBatch.Draw(_frameBuffer, new Vector2(0, 0), Color.White);
             _gui.DrawFPS(gameTime);
             _spriteBatch.End();

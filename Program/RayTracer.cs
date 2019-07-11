@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Program.Materials;
 using Program.Surfaces;
 using Program.Util;
 
@@ -13,9 +14,15 @@ namespace Program
         // TODO: create some sort of entity manager or scene graph later on
         private readonly HitableList World;
 
-        private readonly XorShiftRandom rand;
+        public static XorShiftRandom rand;
 
+        // Prime target for refactor
         private readonly RendererConfiguration renderConfig;
+
+        static RayTracer()
+        {
+            rand = new XorShiftRandom();
+        }
 
         public RayTracer(RendererConfiguration renderConfig)
         {
@@ -29,14 +36,15 @@ namespace Program
 
             List<Hitable> objectList = new List<Hitable>()
             {
-            new Sphere(new Vector3(0f, 0f, -1f), 0.5f),
-            new Sphere(new Vector3(0f, -100.5f, -1f), 100f)
+            new Sphere(new Vector3(0f, 0f, -1f), 0.5f, new Lambertian(new Vector3(0.8f, 0.3f, 0.3f))),
+            new Sphere(new Vector3(0f, -100.5f, 1f), 100, new Lambertian(new Vector3(0.8f, 0.8f, 0.0f))),
+            new Sphere(new Vector3(1f, 0f, -1f), 0.5f, new Metal(new Vector3(0.8f, 0.6f, 0.2f), 0.3f)),
+            new Sphere(new Vector3(-1f, 0f, -1f), 0.5f, new Metal(new Vector3(0.8f, 0.8f, 0.8f), 1.0f)),
             };
 
             World = new HitableList(objectList);
 
             camera = new Camera(new Vector3(-2f, -1f, -1f), new Vector3(4f, 0f, 0f), new Vector3(0f, 2f, 0f));
-            rand = new XorShiftRandom();
         }
 
         public Color[] NextFrame()
@@ -58,7 +66,7 @@ namespace Program
                             float u = (float)(x + rand.NextDouble()) / renderConfig.Width;
                             float v = (float)(y + rand.NextDouble()) / renderConfig.Height;
 
-                            color += PixelColor(camera.GetRay(u, v), World);
+                            color += PixelColor(camera.GetRay(u, v), World, 0);
                         }
 
                         color /= renderConfig.AASamples;
@@ -75,7 +83,7 @@ namespace Program
                         float u = (float)x / renderConfig.Width;
                         float v = (float)y / renderConfig.Height;
 
-                        var color = PixelColor(camera.GetRay(u, v), World);
+                        var color = PixelColor(camera.GetRay(u, v), World, 0);
 
                         color = new Vector3(MathUtil.FastSqrt(color.X), MathUtil.FastSqrt(color.Y), MathUtil.FastSqrt(color.Z));
 
@@ -91,14 +99,23 @@ namespace Program
             return frameBuffer;
         }
 
-        private Vector3 PixelColor(in Ray ray, HitableList hitableList)
+        private Vector3 PixelColor(in Ray ray, HitableList hitableList, int depth)
         {
             var hitRecord = new HitRecord();
 
             if(hitableList.Hit(ray, 0.001f, float.MaxValue, ref hitRecord))
             {
-                var target = hitRecord.P + hitRecord.Normal + RandomInUnitSphere();
-                return 0.5f * PixelColor(new Ray(hitRecord.P, target - hitRecord.P), hitableList);
+                var scattered = new Ray();
+                var attenuation = new Vector3();
+
+                if(depth < 50 && hitRecord.Material.Scatter(ray, hitRecord, ref attenuation, ref scattered))
+                {
+                    return attenuation * PixelColor(scattered, World, depth + 1);
+                }
+                else
+                {
+                    return Vector3.Zero;
+                }
             }
             else
             {
@@ -109,7 +126,7 @@ namespace Program
             }
         }
 
-        private Vector3 RandomInUnitSphere()
+        public static Vector3 RandomInUnitSphere()
         {
             Vector3 p;
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Program.Materials;
 
 namespace Program.Surfaces
 {
@@ -8,16 +9,19 @@ namespace Program.Surfaces
         public Vector3 Center { get; set; }
         public float Radius { get; set; }
 
+        public Material Material { get; }
+
         public Sphere()
         {
             Center = new Vector3();
             Radius = 1.0f;
         }
 
-        public Sphere(Vector3 center, float radius)
+        public Sphere(Vector3 center, float radius, Material mat)
         {
             Center = center;
             Radius = radius;
+            Material = mat;
         }
 
         public override bool Hit(in Ray ray, float t_min, float t_max, ref HitRecord record)
@@ -36,6 +40,7 @@ namespace Program.Surfaces
                     record.T = temp;
                     record.P = ray.PointAtParameter(record.T);
                     record.Normal = (record.P - Center) / Radius;
+                    record.Material = Material;
                     return true;
                 }
 
@@ -45,6 +50,7 @@ namespace Program.Surfaces
                     record.T = temp;
                     record.P = ray.PointAtParameter(record.T);
                     record.Normal = (record.P - Center) / Radius;
+                    record.Material = Material;
                     return true;
                 }
             }

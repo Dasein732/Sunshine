@@ -10,9 +10,9 @@ namespace Program
             Direction = direction;
         }
 
-        public Vector3 Origin { get; }
+        public Vector3 Origin { get; set; }
 
-        public Vector3 Direction { get; }
+        public Vector3 Direction { get; set; }
 
         public Vector3 PointAtParameter(float point) => Origin + point * Direction;
     }
