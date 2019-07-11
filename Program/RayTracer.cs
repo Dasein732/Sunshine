@@ -17,6 +17,11 @@ namespace Program
             width = x;
             height = y;
             frameBuffer = new Color[width * height];
+
+            for(int i = 0; i < frameBuffer.Length; i++)
+            {
+                frameBuffer[i] = new Color();
+            }
         }
 
         public Color[] NextFrame()
@@ -25,15 +30,14 @@ namespace Program
             {
                 for(int x = 0; x < width; x++)
                 {
-                    var pixelColor = new Color();
-                    pixelColor.R = (byte)(255.99 * ((float)x / width));
-                    pixelColor.G = (byte)(255.99 * ((float)y / height));
-                    pixelColor.B = (byte)(255.99 * 0.2);
-                    pixelColor.A = 255;
-
                     // chapter 1 outputs the image to the image file, we're flipping the
                     // row pointer so that we start from the other end in order to get same visual result.
-                    frameBuffer[(height - 1 - y) * width + x] = pixelColor;
+                    var index = (height - 1 - y) * width + x;
+
+                    frameBuffer[index].R = (byte)(255.99 * ((float)x / width));
+                    frameBuffer[index].G = (byte)(255.99 * ((float)y / height));
+                    frameBuffer[index].B = (byte)(255.99 * 0.2);
+                    frameBuffer[index].A = 255;
                 }
             }
 
