@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace Program
 {
-    public sealed class Ray
+    public struct Ray
     {
         public Ray(in Vector3 origin, in Vector3 direction)
         {
