@@ -55,8 +55,22 @@ namespace Program
             return frameBuffer;
         }
 
-        public void PixelColor(in Ray ray, ref Color color)
+        // Temp, only using these for sake of clarity, will remove once the collision method becomes modular
+        private static Vector3 SpherePosition = new Vector3(0f, 0f, -1f);
+
+        private static float SphereRadius = 0.5f;
+
+        private static void PixelColor(in Ray ray, ref Color color)
         {
+            if(IsSphereHit(SpherePosition, SphereRadius, ray))
+            {
+                color.R = 255;
+                color.G = 0;
+                color.B = 0;
+                color.A = 255;
+                return;
+            }
+
             float t = 0.5f * (Vector3.Normalize(ray.Direction).Y + 1);
 
             //  lerp => blended_value = (1-t)*start_value + t*end_value​
@@ -65,6 +79,17 @@ namespace Program
             color.G = (byte)(result.Y * 255.99f);
             color.B = (byte)(result.Z * 255.99f);
             color.A = 255;
+        }
+
+        private static bool IsSphereHit(in Vector3 center, float radius, in Ray ray)
+        {
+            var rayToCenter = ray.Origin - center;
+            float a = Vector3.Dot(ray.Direction, ray.Direction);
+            float b = 2.0f * Vector3.Dot(rayToCenter, ray.Direction);
+            float c = Vector3.Dot(rayToCenter, rayToCenter) - radius * radius;
+            float discriminant = b * b - 4 * a * c;
+
+            return discriminant > 0;
         }
     }
 }
