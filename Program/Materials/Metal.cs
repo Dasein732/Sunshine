@@ -4,7 +4,7 @@ using Program.Util;
 
 namespace Program.Materials
 {
-    public class Metal : Material
+    public sealed class Metal : Material
     {
         private readonly Vector3 _albeido;
         private readonly float _fuzz;

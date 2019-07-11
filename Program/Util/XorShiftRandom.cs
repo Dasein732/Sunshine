@@ -5,12 +5,12 @@ namespace Program.Util
     /// <summary>
     /// Taken from http://codingha.us/2018/12/17/xorshift-fast-csharp-random-number-generator/
     /// </summary>
-    public class XorShiftRandom
+    public static class XorShiftRandom
     {
-        private ulong x_;
-        private ulong y_;
+        private static ulong x_;
+        private static ulong y_;
 
-        public XorShiftRandom()
+        static XorShiftRandom()
         {
             x_ = (ulong)Guid.NewGuid().GetHashCode();
             y_ = (ulong)Guid.NewGuid().GetHashCode();
@@ -18,12 +18,12 @@ namespace Program.Util
 
         private const double DOUBLE_UNIT = 1.0 / (int.MaxValue + 1.0);
 
-        public float NextFloat()
+        public static float NextFloat()
         {
             return (float)NextDouble();
         }
 
-        public double NextDouble()
+        public static double NextDouble()
         {
             double _;
             ulong temp_x, temp_y, temp_z;
@@ -41,7 +41,7 @@ namespace Program.Util
             return _;
         }
 
-        public int NextInt32()
+        public static int NextInt32()
         {
             int _;
             ulong temp_x, temp_y;

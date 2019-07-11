@@ -14,15 +14,7 @@ namespace Program
         // TODO: create some sort of entity manager or scene graph later on
         private readonly HitableList World;
 
-        public static XorShiftRandom rand;
-
-        // Prime target for refactor
         private readonly RendererConfiguration renderConfig;
-
-        static RayTracer()
-        {
-            rand = new XorShiftRandom();
-        }
 
         public RayTracer(RendererConfiguration renderConfig)
         {
@@ -39,7 +31,8 @@ namespace Program
             new Sphere(new Vector3(0f, 0f, -1f), 0.5f, new Lambertian(new Vector3(0.8f, 0.3f, 0.3f))),
             new Sphere(new Vector3(0f, -100.5f, 1f), 100, new Lambertian(new Vector3(0.8f, 0.8f, 0.0f))),
             new Sphere(new Vector3(1f, 0f, -1f), 0.5f, new Metal(new Vector3(0.8f, 0.6f, 0.2f), 0.3f)),
-            new Sphere(new Vector3(-1f, 0f, -1f), 0.5f, new Metal(new Vector3(0.8f, 0.8f, 0.8f), 1.0f)),
+            new Sphere(new Vector3(-1f, 0f, -1f), 0.5f, new Dielectric(1.5f)),
+            new Sphere(new Vector3(-1f, 0f, -1f), -0.45f, new Dielectric(1.5f)),
             };
 
             World = new HitableList(objectList);
@@ -63,8 +56,8 @@ namespace Program
 
                         for(int i = 0; i < renderConfig.AASamples; i++)
                         {
-                            float u = (float)(x + rand.NextDouble()) / renderConfig.Width;
-                            float v = (float)(y + rand.NextDouble()) / renderConfig.Height;
+                            float u = (x + XorShiftRandom.NextFloat()) / renderConfig.Width;
+                            float v = (y + XorShiftRandom.NextFloat()) / renderConfig.Height;
 
                             color += PixelColor(camera.GetRay(u, v), World, 0);
                         }
@@ -132,7 +125,7 @@ namespace Program
 
             do
             {
-                p = 2.0f * new Vector3(rand.NextFloat(), rand.NextFloat(), rand.NextFloat()) - Vector3.One;
+                p = 2.0f * new Vector3(XorShiftRandom.NextFloat(), XorShiftRandom.NextFloat(), XorShiftRandom.NextFloat()) - Vector3.One;
             } while(p.LengthSquared() >= 1);
 
             return p;

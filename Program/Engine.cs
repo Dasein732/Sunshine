@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.IO;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -35,7 +36,7 @@ namespace Program
         protected override void Initialize()
         {
             _renderConfig.Antialiasing = true;
-            _renderConfig.AASamples = 8;
+            _renderConfig.AASamples = 100;
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _gui = new GUI(_spriteBatch, _renderConfig.Width, _renderConfig.Height);
             _tracer = new RayTracer(_renderConfig);
@@ -66,6 +67,9 @@ namespace Program
             GraphicsDevice.Clear(Color.White);
 
             _frameBuffer.SetData(_tracer.NextFrame());
+            _frameBuffer.SaveAsPng(File.OpenWrite("CurrentProgress.png"), 800, 400);
+
+            _spriteBatch.Begin();
             _spriteBatch.Draw(_frameBuffer, new Vector2(0, 0), Color.White);
             _gui.DrawFPS(gameTime);
             _spriteBatch.End();
