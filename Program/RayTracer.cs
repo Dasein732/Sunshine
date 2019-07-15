@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Program.Materials;
 using Program.Surfaces;
@@ -42,7 +43,7 @@ namespace Program
 
         public Color[] NextFrame()
         {
-            for(int y = renderConfig.Height - 1; y >= 0; y--)
+            Parallel.For(0, renderConfig.Height, y =>
             {
                 for(int x = 0; x < renderConfig.Width; x++)
                 {
@@ -87,7 +88,7 @@ namespace Program
                         frameBuffer[index].A = 255;
                     }
                 }
-            }
+            });
 
             return frameBuffer;
         }
