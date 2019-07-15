@@ -24,3 +24,4 @@ Rudimentary functionality is in place, I wouldn't even call this a toy project a
 * [X] Add font support.
 * [X] Add simple GUI overlay for FPS display.
 * [X] Implement basic render configuration system.
+* [X] CPU parallelism in major rendering loop.
