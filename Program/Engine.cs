@@ -67,7 +67,7 @@ namespace Program
             GraphicsDevice.Clear(Color.White);
 
             _frameBuffer.SetData(_tracer.NextFrame());
-            _frameBuffer.SaveAsPng(File.OpenWrite("CurrentProgress.png"), 800, 400);
+            //_frameBuffer.SaveAsPng(File.OpenWrite("CurrentProgress.png"), 800, 400);
 
             _spriteBatch.Begin();
             _spriteBatch.Draw(_frameBuffer, new Vector2(0, 0), Color.White);
