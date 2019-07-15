@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Program.Materials;
@@ -34,11 +35,17 @@ namespace Program
             new Sphere(new Vector3(1f, 0f, -1f), 0.5f, new Metal(new Vector3(0.8f, 0.6f, 0.2f), 0.3f)),
             new Sphere(new Vector3(-1f, 0f, -1f), 0.5f, new Dielectric(1.5f)),
             new Sphere(new Vector3(-1f, 0f, -1f), -0.45f, new Dielectric(1.5f)),
-            };
+           };
 
             World = new HitableList(objectList);
 
-            camera = new Camera(new Vector3(-2f, -1f, -1f), new Vector3(4f, 0f, 0f), new Vector3(0f, 2f, 0f));
+            camera = new Camera(
+                    new Vector3(-2f, 2f, 1f),
+                    new Vector3(0f, 0f, -1f),
+                    new Vector3(0f, 1f, 0f),
+                    90,
+                    (float)renderConfig.Width / renderConfig.Height
+                );
         }
 
         public Color[] NextFrame()
