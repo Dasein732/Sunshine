@@ -9,11 +9,14 @@ namespace Program
         public Vector3 LowerLeftCorner { get; }
         public Vector3 Horizontal { get; }
         public Vector3 Vertical { get; }
+        private Vector3 u { get; }
+        private Vector3 w { get; }
+        private Vector3 v { get; }
+        private float lensRadius { get; }
 
-        public Camera(Vector3 origin, Vector3 direction, Vector3 up, float verticalFOVDeg, float aspect)
+        public Camera(Vector3 origin, Vector3 direction, Vector3 up, float verticalFOVDeg, float aspect, float aperture, float focusDistance)
         {
-            Vector3 u, v, w;
-
+            lensRadius = aperture / 2;
             var theta = verticalFOVDeg * MathF.PI / 180;
             var halfHeight = MathF.Tan(theta / 2);
             var halfWidth = aspect * halfHeight;
@@ -23,14 +26,16 @@ namespace Program
             v = Vector3.Cross(w, u);
 
             Origin = origin;
-            LowerLeftCorner = Origin - halfWidth * u - halfHeight * v - w;
-            Horizontal = 2 * halfWidth * u;
-            Vertical = 2 * halfHeight * v;
+            LowerLeftCorner = Origin - halfWidth * focusDistance * u - halfHeight * focusDistance * v - focusDistance * w;
+            Horizontal = 2 * halfWidth * focusDistance * u;
+            Vertical = 2 * halfHeight * focusDistance * v;
         }
 
-        public Ray GetRay(float u, float v)
+        public Ray GetRay(float s, float t)
         {
-            return new Ray(Origin, LowerLeftCorner + u * Horizontal + v * Vertical - Origin);
+            var rd = lensRadius * RayTracer.RandomInUnitSphere();
+            var offset = u * rd.X + v * rd.Y;
+            return new Ray(Origin + offset, LowerLeftCorner + s * Horizontal + t * Vertical - Origin - offset);
         }
     }
 }

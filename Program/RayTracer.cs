@@ -28,24 +28,54 @@ namespace Program
                 frameBuffer[i] = new Color();
             }
 
-            List<Hitable> objectList = new List<Hitable>()
-            {
-            new Sphere(new Vector3(0f, 0f, -1f), 0.5f, new Lambertian(new Vector3(0.8f, 0.3f, 0.3f))),
-            new Sphere(new Vector3(0f, -100.5f, 1f), 100, new Lambertian(new Vector3(0.8f, 0.8f, 0.0f))),
-            new Sphere(new Vector3(1f, 0f, -1f), 0.5f, new Metal(new Vector3(0.8f, 0.6f, 0.2f), 0.3f)),
-            new Sphere(new Vector3(-1f, 0f, -1f), 0.5f, new Dielectric(1.5f)),
-            new Sphere(new Vector3(-1f, 0f, -1f), -0.45f, new Dielectric(1.5f)),
-           };
-
-            World = new HitableList(objectList);
+            World = new HitableList(RandomScene());
 
             camera = new Camera(
-                    new Vector3(-2f, 2f, 1f),
-                    new Vector3(0f, 0f, -1f),
+                    new Vector3(13f, 2f, 3f),
+                    new Vector3(0f, 0f, 0f),
                     new Vector3(0f, 1f, 0f),
-                    90,
-                    (float)renderConfig.Width / renderConfig.Height
+                    20,
+                    (float)renderConfig.Width / renderConfig.Height,
+                    0.1f,
+                    10f
                 );
+        }
+
+        private List<Hitable> RandomScene()
+        {
+            var result = new List<Hitable>();
+
+            result.Add(new Sphere(new Vector3(0f, -1000f, 0f), 1000f, new Lambertian(new Vector3(0.5f, 0.5f, 0.5f))));
+            result.Add(new Sphere(new Vector3(0f, 1f, 0f), 1f, new Dielectric(1.5f)));
+            result.Add(new Sphere(new Vector3(-4f, 1f, 0f), 1f, new Lambertian(new Vector3(0.4f, 0.2f, 0.1f))));
+            result.Add(new Sphere(new Vector3(4f, 1f, 0f), 1f, new Metal(new Vector3(0.7f, 0.6f, 0.5f), 0.0f)));
+
+            for(int a = -11; a < 11; a++)
+            {
+                for(int b = -11; b < 11; b++)
+                {
+                    float material = XorShiftRandom.NextFloat();
+                    Vector3 center = new Vector3(a + 0.9f * XorShiftRandom.NextFloat(), 0.2f, b + 0.9f * XorShiftRandom.NextFloat());
+
+                    if((center - new Vector3(4f, 0f, 0.2f)).Length() > 0.9f)
+                    {
+                        if(material < 0.8f)
+                        {
+                            result.Add(new Sphere(center, 0.2f, new Lambertian(new Vector3(XorShiftRandom.NextFloat() * XorShiftRandom.NextFloat(), XorShiftRandom.NextFloat() * XorShiftRandom.NextFloat(), XorShiftRandom.NextFloat() * XorShiftRandom.NextFloat()))));
+                        }
+                        else if(material < 0.95f)
+                        {
+                            result.Add(new Sphere(center, 0.2f, new Metal(new Vector3(0.5f * (1 + XorShiftRandom.NextFloat()), 0.5f * (1 + XorShiftRandom.NextFloat()), 0.5f * (1 + XorShiftRandom.NextFloat())), 0.5f * XorShiftRandom.NextFloat())));
+                        }
+                        else
+                        {
+                            result.Add(new Sphere(center, 0.2f, new Dielectric(1.5f)));
+                        }
+                    }
+                }
+            }
+
+            return result;
         }
 
         public Color[] NextFrame()
@@ -133,8 +163,8 @@ namespace Program
 
             do
             {
-                p = 2.0f * new Vector3(XorShiftRandom.NextFloat(), XorShiftRandom.NextFloat(), XorShiftRandom.NextFloat()) - Vector3.One;
-            } while(p.LengthSquared() >= 1);
+                p = 2.0f * new Vector3(XorShiftRandom.NextFloat(), XorShiftRandom.NextFloat(), 0) - new Vector3(1f, 1f, 0f);
+            } while(Vector3.Dot(p, p) >= 1);
 
             return p;
         }
