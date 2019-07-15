@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace Program
+namespace Core.Interfaces
 {
-    internal interface IRenderer
+    public interface IRenderer
     {
         Color[] NextFrame();
     }

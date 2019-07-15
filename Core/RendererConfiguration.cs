@@ -1,4 +1,4 @@
-﻿namespace Program
+﻿namespace Core
 {
     public class RendererConfiguration
     {

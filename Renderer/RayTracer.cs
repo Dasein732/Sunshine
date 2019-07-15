@@ -4,11 +4,12 @@ using System.Threading.Tasks;
 using Core;
 using Core.Materials;
 using Core.Surfaces;
+using Core.Interfaces;
 using Microsoft.Xna.Framework;
 using Sunshine.Utility;
 using Ray = Core.Ray;
 
-namespace Program
+namespace Renderer
 {
     public sealed class RayTracer : IRenderer
     {

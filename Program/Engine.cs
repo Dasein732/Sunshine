@@ -1,7 +1,10 @@
 ﻿using System.IO;
+using Core;
+using Core.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Renderer;
 
 namespace Program
 {
