@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace Program
+namespace Core
 {
     public struct Ray
     {

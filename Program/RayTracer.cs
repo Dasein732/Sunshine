@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Core;
+using Core.Materials;
+using Core.Surfaces;
 using Microsoft.Xna.Framework;
-using Program.Materials;
-using Program.Surfaces;
 using Sunshine.Utility;
+using Ray = Core.Ray;
 
 namespace Program
 {

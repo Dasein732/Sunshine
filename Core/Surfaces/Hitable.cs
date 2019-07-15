@@ -1,4 +1,6 @@
-﻿namespace Program
+﻿using Microsoft.Xna.Framework;
+
+namespace Core.Surfaces
 {
     public abstract class Hitable
     {

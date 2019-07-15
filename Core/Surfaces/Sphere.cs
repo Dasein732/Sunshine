@@ -1,8 +1,8 @@
 ﻿using System;
+using Core.Materials;
 using Microsoft.Xna.Framework;
-using Program.Materials;
 
-namespace Program.Surfaces
+namespace Core.Surfaces
 {
     public sealed class Sphere : Hitable
     {

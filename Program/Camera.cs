@@ -1,6 +1,8 @@
 ﻿using System;
+using Core;
 using Microsoft.Xna.Framework;
 using Sunshine.Utility;
+using Ray = Core.Ray;
 
 namespace Program
 {

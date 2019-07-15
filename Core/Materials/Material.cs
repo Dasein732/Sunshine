@@ -1,6 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Core.Surfaces;
+using Microsoft.Xna.Framework;
 
-namespace Program.Materials
+namespace Core.Materials
 {
     public abstract class Material
     {

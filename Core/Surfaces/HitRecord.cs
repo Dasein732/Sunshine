@@ -1,7 +1,7 @@
-﻿using Microsoft.Xna.Framework;
-using Program.Materials;
+﻿using Core.Materials;
+using Microsoft.Xna.Framework;
 
-namespace Program
+namespace Core.Surfaces
 {
     public struct HitRecord
     {

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 
-namespace Program.Surfaces
+namespace Core.Surfaces
 {
     public sealed class HitableList : Hitable
     {

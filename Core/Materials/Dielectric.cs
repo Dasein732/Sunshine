@@ -1,8 +1,9 @@
 ﻿using System;
+using Core.Surfaces;
 using Microsoft.Xna.Framework;
 using Sunshine.Utility;
 
-namespace Program.Materials
+namespace Core.Materials
 {
     public sealed class Dielectric : Material
     {
