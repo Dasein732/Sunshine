@@ -45,7 +45,7 @@ namespace Program
         {
             Parallel.For(0, renderConfig.Height, y =>
             {
-                for(int x = 0; x < renderConfig.Width; x++)
+                Parallel.For(0, renderConfig.Width, x =>
                 {
                     // chapter 1 outputs the image to the image file, we're flipping the
                     // row pointer so that we start from the other end in order to get same visual result.
@@ -87,7 +87,7 @@ namespace Program
                         frameBuffer[index].B = (byte)color.Z;
                         frameBuffer[index].A = 255;
                     }
-                }
+                });
             });
 
             return frameBuffer;
