@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.Xna.Framework;
-using Program.Util;
+using Sunshine.Utility;
 
 namespace Program.Materials
 {

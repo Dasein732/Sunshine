@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Sunshine.Utility;
 
 namespace Program
 {
@@ -9,32 +10,32 @@ namespace Program
         public Vector3 LowerLeftCorner { get; }
         public Vector3 Horizontal { get; }
         public Vector3 Vertical { get; }
-        private Vector3 u { get; }
-        private Vector3 w { get; }
-        private Vector3 v { get; }
-        private float lensRadius { get; }
+        private Vector3 U { get; }
+        private Vector3 W { get; }
+        private Vector3 V { get; }
+        private float LensRadius { get; }
 
         public Camera(Vector3 origin, Vector3 direction, Vector3 up, float verticalFOVDeg, float aspect, float aperture, float focusDistance)
         {
-            lensRadius = aperture / 2;
+            LensRadius = aperture / 2;
             var theta = verticalFOVDeg * MathF.PI / 180;
             var halfHeight = MathF.Tan(theta / 2);
             var halfWidth = aspect * halfHeight;
 
-            w = Vector3.Normalize(origin - direction);
-            u = Vector3.Normalize(Vector3.Cross(up, w));
-            v = Vector3.Cross(w, u);
+            W = Vector3.Normalize(origin - direction);
+            U = Vector3.Normalize(Vector3.Cross(up, W));
+            V = Vector3.Cross(W, U);
 
             Origin = origin;
-            LowerLeftCorner = Origin - halfWidth * focusDistance * u - halfHeight * focusDistance * v - focusDistance * w;
-            Horizontal = 2 * halfWidth * focusDistance * u;
-            Vertical = 2 * halfHeight * focusDistance * v;
+            LowerLeftCorner = Origin - halfWidth * focusDistance * U - halfHeight * focusDistance * V - focusDistance * W;
+            Horizontal = 2 * halfWidth * focusDistance * U;
+            Vertical = 2 * halfHeight * focusDistance * V;
         }
 
         public Ray GetRay(float s, float t)
         {
-            var rd = lensRadius * RayTracer.RandomInUnitSphere();
-            var offset = u * rd.X + v * rd.Y;
+            var rd = LensRadius * MathUtil.RandomInUnitSphere();
+            var offset = U * rd.X + V * rd.Y;
             return new Ray(Origin + offset, LowerLeftCorner + s * Horizontal + t * Vertical - Origin - offset);
         }
     }

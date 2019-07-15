@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace Program.Util
+namespace Sunshine.Utility
 {
     public static class VectorExt
     {

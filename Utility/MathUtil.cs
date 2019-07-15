@@ -1,4 +1,6 @@
-﻿namespace Program.Util
+﻿using Microsoft.Xna.Framework;
+
+namespace Sunshine.Utility
 {
     public static class MathUtil
     {
@@ -21,6 +23,18 @@
 
                 return y;
             }
+        }
+
+        public static Vector3 RandomInUnitSphere()
+        {
+            Vector3 p;
+
+            do
+            {
+                p = 2.0f * new Vector3(XorShiftRandom.NextFloat(), XorShiftRandom.NextFloat(), 0) - new Vector3(1f, 1f, 0f);
+            } while(Vector3.Dot(p, p) >= 1);
+
+            return p;
         }
     }
 }

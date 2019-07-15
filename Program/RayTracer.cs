@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Program.Materials;
 using Program.Surfaces;
-using Program.Util;
+using Sunshine.Utility;
 
 namespace Program
 {
@@ -155,18 +155,6 @@ namespace Program
                 //  lerp => blended_value = (1-t)*start_value + t*end_value​
                 return (1.0f - t) * Vector3.One + t * new Vector3(0.5f, 0.7f, 1.0f);
             }
-        }
-
-        public static Vector3 RandomInUnitSphere()
-        {
-            Vector3 p;
-
-            do
-            {
-                p = 2.0f * new Vector3(XorShiftRandom.NextFloat(), XorShiftRandom.NextFloat(), 0) - new Vector3(1f, 1f, 0f);
-            } while(Vector3.Dot(p, p) >= 1);
-
-            return p;
         }
     }
 }

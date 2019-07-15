@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using Program.Util;
+using Sunshine.Utility;
 
 namespace Program.Materials
 {
@@ -18,7 +18,7 @@ namespace Program.Materials
         public override bool Scatter(in Ray ray, in HitRecord record, ref Vector3 Attenuation, ref Ray scattered)
         {
             scattered.Origin = record.P;
-            scattered.Direction = Reflect(Vector3.Normalize(ray.Direction), record.Normal) + _fuzz * RayTracer.RandomInUnitSphere();
+            scattered.Direction = Reflect(Vector3.Normalize(ray.Direction), record.Normal) + _fuzz * MathUtil.RandomInUnitSphere();
             _albeido.CopyTo(ref Attenuation);
 
             return Vector3.Dot(scattered.Direction, record.Normal) > 0;

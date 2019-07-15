@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Program.Util
+namespace Sunshine.Utility
 {
     /// <summary>
     /// Taken from http://codingha.us/2018/12/17/xorshift-fast-csharp-random-number-generator/
